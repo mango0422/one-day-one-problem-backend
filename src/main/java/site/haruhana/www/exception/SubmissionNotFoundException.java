@@ -1,7 +1,19 @@
 package site.haruhana.www.exception;
 
+import lombok.Getter;
+import site.haruhana.www.common.ErrorCode;
+
+@Getter
 public class SubmissionNotFoundException extends RuntimeException {
+
+    private final ErrorCode errorCode;
+
     public SubmissionNotFoundException() {
-        super("제출 정보가 존재하지 않습니다.");
+        this(ErrorCode.SUBMISSION_NOT_FOUND);
+    }
+
+    public SubmissionNotFoundException(ErrorCode errorCode) {
+        super(errorCode.getDefaultMessage());
+        this.errorCode = errorCode;
     }
 }

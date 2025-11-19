@@ -1,7 +1,18 @@
 package site.haruhana.www.exception;
 
+import lombok.Getter;
+import site.haruhana.www.common.ErrorCode;
+
+@Getter
 public class InvalidAnswerFormatException extends RuntimeException {
+    private final ErrorCode errorCode;
+
     public InvalidAnswerFormatException() {
-        super("올바르지 않은 답안 형식입니다. 객관식 문제의 경우 숫자만 입력 가능합니다.");
+        this(ErrorCode.INVALID_ANSWER_FORMAT);
+    }
+
+    public InvalidAnswerFormatException(ErrorCode errorCode) {
+        super(errorCode.getDefaultMessage());
+        this.errorCode = errorCode;
     }
 }

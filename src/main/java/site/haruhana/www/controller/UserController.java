@@ -11,6 +11,8 @@ import site.haruhana.www.dto.BaseResponse;
 import site.haruhana.www.dto.user.UserDto;
 import site.haruhana.www.entity.user.User;
 
+import static site.haruhana.www.common.ErrorCode.CURRENT_USER_FETCH_SUCCESS;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -27,7 +29,6 @@ public class UserController {
             @AuthenticationPrincipal @NotNull User user
     ) {
         UserDto data = UserDto.from(user);
-        return ResponseEntity.ok(BaseResponse.onSuccess("현재 사용자 정보를 성공적으로 조회했습니다.", data));
+        return CURRENT_USER_FETCH_SUCCESS.toResponseEntity(data);
     }
-    
 }
