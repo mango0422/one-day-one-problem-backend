@@ -10,7 +10,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import site.haruhana.www.common.ErrorCode;
 import site.haruhana.www.dto.BaseResponse;
 import site.haruhana.www.exception.InvalidAnswerFormatException;
 import site.haruhana.www.exception.ProblemNotFoundException;
@@ -20,19 +19,6 @@ import static site.haruhana.www.common.ErrorCode.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    private ResponseEntity<BaseResponse<Void>> error(ErrorCode code) {
-        return ResponseEntity
-                .status(code.getStatus())
-                .body(BaseResponse.error(code));
-    }
-
-    private ResponseEntity<BaseResponse<Void>> error(ErrorCode code, String message) {
-        return ResponseEntity
-                .status(code.getStatus())
-                .body(BaseResponse.error(code, message));
-    }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -46,7 +32,7 @@ public class GlobalExceptionHandler {
 
         String message = INVALID_INPUT_VALUE.getDefaultMessage() + ": " + errorDetails;
 
-        return error(INVALID_INPUT_VALUE, message);
+        return INVALID_INPUT_VALUE.toResponseEntity(message);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -61,41 +47,41 @@ public class GlobalExceptionHandler {
 
         String message = INVALID_INPUT_VALUE.getDefaultMessage() + ": " + errorDetails;
 
-        return error(INVALID_INPUT_VALUE, message);
+        return INVALID_INPUT_VALUE.toResponseEntity(message);
     }
 
     @ExceptionHandler(ProblemNotFoundException.class)
     public ResponseEntity<BaseResponse<Void>> handleProblemNotFoundException(ProblemNotFoundException e) {
-        return error(PROBLEM_NOT_FOUND, e.getMessage());
+        return PROBLEM_NOT_FOUND.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(InvalidAnswerFormatException.class)
     public ResponseEntity<BaseResponse<Void>> handleInvalidAnswerFormatException(InvalidAnswerFormatException e) {
-        return error(INVALID_ANSWER_FORMAT, e.getMessage());
+        return INVALID_ANSWER_FORMAT.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<BaseResponse<Void>> handleExpiredJwtException(ExpiredJwtException e) {
-        return error(TOKEN_EXPIRED, e.getMessage());
+        return TOKEN_EXPIRED.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(UnsupportedJwtException.class)
     public ResponseEntity<BaseResponse<Void>> handleUnsupportedJwtException(UnsupportedJwtException e) {
-        return error(TOKEN_UNSUPPORTED, e.getMessage());
+        return TOKEN_UNSUPPORTED.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<BaseResponse<Void>> handleMalformedJwtException(MalformedJwtException e) {
-        return error(TOKEN_MALFORMED, e.getMessage());
+        return TOKEN_MALFORMED.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<BaseResponse<Void>> handleJwtException(JwtException e) {
-        return error(TOKEN_ERROR, e.getMessage());
+        return TOKEN_ERROR.toResponseEntity(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<BaseResponse<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
-        return error(ILLEGAL_ARGUMENT, e.getMessage());
+        return ILLEGAL_ARGUMENT.toResponseEntity(e.getMessage());
     }
 }

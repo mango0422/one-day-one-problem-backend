@@ -26,20 +26,18 @@ public class BaseResponse<T> {
         return new BaseResponse<>(true, 200, message, data);
     }
 
-    public static <T> BaseResponse<T> onUnauthorized(String message) {
-        return new BaseResponse<>(false, 401, message, null);
-    }
-
-    public static <T> BaseResponse<T> onForbidden(String message) {
-        return new BaseResponse<>(false, 403, message, null);
-    }
-
     public static <T> BaseResponse<T> error(ErrorCode errorCode) {
-        return new BaseResponse<>(false, errorCode.getStatus().value(), errorCode.getDefaultMessage(), null);
+        return new BaseResponse<>(
+                false,
+                errorCode.getStatus().value(),
+                errorCode.getDefaultMessage(),
+                null
+        );
     }
 
     public static <T> BaseResponse<T> error(ErrorCode errorCode, String overrideMessage) {
-        return new BaseResponse<>(false,
+        return new BaseResponse<>(
+                false,
                 errorCode.getStatus().value(),
                 overrideMessage != null ? overrideMessage : errorCode.getDefaultMessage(),
                 null
