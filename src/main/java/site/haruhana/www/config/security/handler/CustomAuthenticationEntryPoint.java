@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import site.haruhana.www.common.ErrorCode;
 import site.haruhana.www.dto.BaseResponse;
 
 import java.io.IOException;
@@ -27,12 +28,13 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
+        ErrorCode code = ErrorCode.UNAUTHORIZED;
         // HTTP 응답 설정
         response.setStatus(HttpStatus.UNAUTHORIZED.value()); // 상태 코드 설정
         response.setContentType(MediaType.APPLICATION_JSON_VALUE); // Content-Type 설정
 
         // 오류 응답 객체 생성
-        BaseResponse<Void> errorResponse = BaseResponse.onUnauthorized("인증이 필요합니다. 로그인 후 이용해주세요.");
+        BaseResponse<Void> errorResponse = code.toResponse();
 
         // 응답 본문에 JSON 작성
         objectMapper.writeValue(response.getOutputStream(), errorResponse);

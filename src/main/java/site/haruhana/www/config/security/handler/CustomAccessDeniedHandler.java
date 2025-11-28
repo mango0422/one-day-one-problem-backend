@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+import site.haruhana.www.common.ErrorCode;
 import site.haruhana.www.dto.BaseResponse;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE); // Content-Type 설정
 
         // 오류 응답 객체 생성
-        BaseResponse<Void> errorResponse = BaseResponse.onForbidden("접근 권한이 없습니다.");
+        BaseResponse<Void> errorResponse = BaseResponse.error(ErrorCode.ACCESS_DENIED);
 
         // 응답 본문에 JSON 작성
         objectMapper.writeValue(response.getOutputStream(), errorResponse);
