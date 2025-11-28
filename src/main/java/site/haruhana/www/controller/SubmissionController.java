@@ -19,9 +19,6 @@ import site.haruhana.www.entity.problem.ProblemType;
 import site.haruhana.www.entity.user.User;
 import site.haruhana.www.service.SubmissionService;
 
-import static site.haruhana.www.common.ErrorCode.SUBMISSION_CREATED;
-import static site.haruhana.www.common.ErrorCode.SUBMISSION_HISTORY_FETCH_SUCCESS;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -44,7 +41,9 @@ public class SubmissionController {
             @Valid @RequestBody SubmissionRequestDto requestDto
     ) {
         SubmissionResponseDto data = submissionService.submitAnswer(user, problemId, requestDto);
-        return SUBMISSION_CREATED.toResponseEntity(data);
+        return ResponseEntity.ok(
+                BaseResponse.onSuccess("답안이 제출되었습니다.", data)
+        );
     }
 
     /**
@@ -71,7 +70,9 @@ public class SubmissionController {
             @RequestParam(required = false) Boolean isCorrect
     ) {
         SubmissionPage<SubmissionHistoryResponseDto> data = submissionService.getSubmissionHistoryByUser(userId, page, size, category, difficulty, type, isCorrect);
-        return SUBMISSION_HISTORY_FETCH_SUCCESS.toResponseEntity(data);
+        return ResponseEntity.ok(
+                BaseResponse.onSuccess("문제 풀이 기록이 성공적으로 조회되었습니다.", data)
+        );
     }
 
 }

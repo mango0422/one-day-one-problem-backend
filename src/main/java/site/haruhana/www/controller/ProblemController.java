@@ -15,8 +15,6 @@ import site.haruhana.www.entity.problem.ProblemDifficulty;
 import site.haruhana.www.entity.problem.ProblemType;
 import site.haruhana.www.entity.user.User;
 import site.haruhana.www.service.ProblemService;
-import static site.haruhana.www.common.ErrorCode.PROBLEM_LIST_FETCH_SUCCESS;
-import static site.haruhana.www.common.ErrorCode.PROBLEM_FETCH_SUCCESS;
 
 
 @RestController
@@ -55,7 +53,9 @@ public class ProblemController {
             @AuthenticationPrincipal User user
     ) {
         ProblemPage<ProblemSummaryDto> data = problemService.getProblems(page, size, category, difficulty, type, sortType, onlyUnsolved, user);
-        return PROBLEM_LIST_FETCH_SUCCESS.toResponseEntity(data);
+        return ResponseEntity.ok(
+                BaseResponse.onSuccess("문제 목록을 조회하는데 성공했습니다.", data)
+        );
     }
 
     /**
@@ -74,6 +74,8 @@ public class ProblemController {
             @AuthenticationPrincipal User user
     ) {
         ProblemDto data = problemService.getProblem(problemId, user);
-        return PROBLEM_FETCH_SUCCESS.toResponseEntity(data);
+        return ResponseEntity.ok(
+                BaseResponse.onSuccess("문제를 조회하는데 성공했습니다.", data)
+        );
     }
 }

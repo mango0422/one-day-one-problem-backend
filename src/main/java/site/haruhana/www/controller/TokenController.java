@@ -12,8 +12,6 @@ import site.haruhana.www.dto.user.TokenDto;
 import site.haruhana.www.dto.user.TokenRefreshRequestDto;
 import site.haruhana.www.utils.JwtUtil;
 
-import static site.haruhana.www.common.ErrorCode.TOKEN_REFRESH_SUCCESS;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -25,6 +23,8 @@ public class TokenController {
     @PostMapping("/refresh")
     public ResponseEntity<BaseResponse<TokenDto>> refreshToken(@RequestBody TokenRefreshRequestDto requestDto) {
         TokenDto newTokens = jwtUtil.refreshTokens(requestDto.getRefreshToken());
-        return TOKEN_REFRESH_SUCCESS.toResponseEntity(newTokens);
+        return ResponseEntity.ok(
+                BaseResponse.onSuccess("토큰이 성공적으로 갱신되었습니다.", newTokens)
+        );
     }
 }
